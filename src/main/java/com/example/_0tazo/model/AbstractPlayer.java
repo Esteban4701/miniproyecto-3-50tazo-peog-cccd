@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * </ul>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
- * @version 2.0
+ * @version 1.0
  * @see     IPlayer
  * @see     HumanPlayer
  * @see     ComputerPlayer

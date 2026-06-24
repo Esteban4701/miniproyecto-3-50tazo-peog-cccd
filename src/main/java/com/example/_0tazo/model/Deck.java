@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * }</pre>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
- * @version 1.1
+ * @version 1.0
  * @see     Card
  */
 public class Deck {

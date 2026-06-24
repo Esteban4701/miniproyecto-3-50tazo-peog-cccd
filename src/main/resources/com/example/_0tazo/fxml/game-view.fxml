@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane
+        prefHeight="650" prefWidth="900"
+        stylesheets="@../styles/styles.css"
+        xmlns="http://javafx.com/javafx/17"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.example._0tazo.controller.GameController">
+
+    <Rectangle fx:id="tableBackground" arcHeight="0" arcWidth="0" height="650"
+               styleClass="table-background" width="900"
+               AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />
+
+    <Ellipse fx:id="tableEllipse" centerX="450" centerY="325"
+             radiusX="360" radiusY="260" styleClass="table-ellipse" />
+
+    <VBox fx:id="timerPanel" spacing="2" styleClass="info-panel"
+          AnchorPane.leftAnchor="15" AnchorPane.topAnchor="15">
+        <Label styleClass="panel-eyebrow" text="TIMER" />
+        <Label fx:id="timerLabel" styleClass="timer-label" text="00:00" />
+    </VBox>
+
+    <VBox fx:id="sumPanel" spacing="2" styleClass="info-panel"
+          AnchorPane.rightAnchor="15" AnchorPane.topAnchor="15">
+        <Label styleClass="panel-eyebrow" text="COUNTER" />
+        <Label fx:id="sumLabel" styleClass="sum-label" text="0" />
+    </VBox>
+
+    <VBox fx:id="machine1Zone" alignment="CENTER" spacing="6"
+          styleClass="player-zone" visible="false"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="20">
+        <Label fx:id="machine1Label" styleClass="player-label" text="Machine 1" />
+        <HBox fx:id="machine1HandBox" alignment="CENTER" spacing="6" />
+    </VBox>
+
+    <VBox fx:id="machine2Zone" alignment="CENTER" spacing="6"
+          styleClass="player-zone, player-zone-side" visible="false"
+          AnchorPane.leftAnchor="15" AnchorPane.topAnchor="220">
+        <Label fx:id="machine2Label" styleClass="player-label" text="Machine 2" />
+        <VBox fx:id="machine2HandBox" alignment="CENTER" spacing="-55" />
+    </VBox>
+
+    <VBox fx:id="machine3Zone" alignment="CENTER" spacing="6"
+          styleClass="player-zone, player-zone-side" visible="false"
+          AnchorPane.rightAnchor="15" AnchorPane.topAnchor="220">
+        <Label fx:id="machine3Label" styleClass="player-label" text="Machine 3" />
+        <VBox fx:id="machine3HandBox" alignment="CENTER" spacing="-55" />
+    </VBox>
+
+    <HBox fx:id="centerZone" alignment="CENTER" spacing="30"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="220">
+        <VBox alignment="CENTER" spacing="6">
+            <Label styleClass="zone-label" text="TABLE" />
+            <StackPane fx:id="tablePane" prefHeight="120" prefWidth="80" styleClass="card-slot" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="6">
+            <Label styleClass="zone-label" text="DECK" />
+            <StackPane fx:id="deckPane" onMouseClicked="#onDeckClicked"
+                       prefHeight="120" prefWidth="80" styleClass="card-slot, deck-slot">
+                <Label fx:id="deckCountLabel" styleClass="deck-count-label" text="52" />
+            </StackPane>
+        </VBox>
+    </HBox>
+
+    <VBox fx:id="humanZone" alignment="CENTER" spacing="8"
+          AnchorPane.bottomAnchor="15" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <Label fx:id="humanLabel" styleClass="player-label, player-label-human" text="You" />
+        <HBox fx:id="humanHandBox" alignment="CENTER" spacing="10" />
+    </VBox>
+
+    <VBox fx:id="aceOverlay" alignment="CENTER" spacing="16"
+          styleClass="message-overlay" visible="false"
+          AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <Label styleClass="message-label" text="Play Ace as:" />
+        <HBox alignment="CENTER" spacing="20">
+            <Button fx:id="aceButton1" text="+1"
+                    styleClass="action-button" onAction="#onAceOne" />
+            <Button fx:id="aceButton10" text="+10"
+                    styleClass="action-button" onAction="#onAceTen" />
+        </HBox>
+    </VBox>
+
+    <VBox fx:id="messageOverlay" alignment="CENTER" spacing="12"
+          styleClass="message-overlay" visible="false"
+          AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <Label fx:id="messageLabel" styleClass="message-label" text="" />
+        <Button fx:id="messageButton" onAction="#onPlayAgain"
+                styleClass="action-button" text="Play again" />
+    </VBox>
+
+    <Label fx:id="turnIndicator" styleClass="turn-indicator" text="▶ YOUR TURN"
+           AnchorPane.bottomAnchor="170" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" />
+
+</AnchorPane>

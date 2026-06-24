@@ -11,7 +11,7 @@ package com.example._0tazo.model;
  * <p>Cards drawn by the human player are always dealt face up.</p>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
- * @version 2.0
+ * @version 1.0
  * @see     AbstractPlayer
  * @see     ComputerPlayer
  */

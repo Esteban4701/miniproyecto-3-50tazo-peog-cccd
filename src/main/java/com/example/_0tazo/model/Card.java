@@ -6,7 +6,7 @@ package com.example._0tazo.model;
  * 104-card double deck by using two back colors (red and blue).
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
- * @version 1.1
+ * @version 1.0
  * @see     Deck
  */
 public class Card {

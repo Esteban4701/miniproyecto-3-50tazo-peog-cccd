@@ -27,7 +27,7 @@ package com.example._0tazo.model.exception;
  * </pre>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
- * @version 2.0
+ * @version 1.0
  */
 public class GameException extends Exception {
 
