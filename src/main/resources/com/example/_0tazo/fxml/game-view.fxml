@@ -97,6 +97,8 @@
         <Label fx:id="messageLabel" styleClass="message-label" text="" />
         <Button fx:id="messageButton" onAction="#onPlayAgain"
                 styleClass="action-button" text="Play again" />
+        <Button onAction="#onGoHome"
+                styleClass="action-button, action-button-secondary" text="← Main Menu" />
     </VBox>
 
     <Label fx:id="turnIndicator" styleClass="turn-indicator" text="▶ YOUR TURN"

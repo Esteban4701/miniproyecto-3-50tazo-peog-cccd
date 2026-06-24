@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane
+        prefHeight="650" prefWidth="900"
+        stylesheets="@../styles/styles.css"
+        xmlns="http://javafx.com/javafx/17"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.example._0tazo.controller.WelcomeController">
+
+    <Rectangle width="900" height="650"
+               styleClass="table-background"
+               AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0"/>
+
+    <Ellipse centerX="450" centerY="325"
+             radiusX="360" radiusY="260"
+             styleClass="table-ellipse"/>
+
+    <VBox alignment="CENTER" spacing="32"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="CINCUENTAZO" styleClass="welcome-title"/>
+            <Label text="The card game of survival" styleClass="welcome-subtitle"/>
+        </VBox>
+
+        <Label text="♠  ♥  ♦  ♣" styleClass="welcome-suits"/>
+
+        <VBox alignment="CENTER" spacing="16">
+            <Button text="START GAME"
+                    styleClass="action-button, action-button-primary"
+                    onAction="#onStart"
+                    prefWidth="200"/>
+            <Button text="HOW TO PLAY"
+                    styleClass="action-button, action-button-secondary"
+                    onAction="#onHowToPlay"
+                    prefWidth="200"/>
+        </VBox>
+
+    </VBox>
+
+    <VBox fx:id="howToPlayOverlay"
+          alignment="CENTER" spacing="0"
+          styleClass="overlay-backdrop"
+          visible="false"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <VBox styleClass="how-to-play-panel" spacing="18" maxWidth="580">
+
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="HOW TO PLAY" styleClass="htp-title"/>
+            </HBox>
+
+            <VBox spacing="6">
+                <Label text="OBJECTIVE" styleClass="htp-section"/>
+                <Label text="Be the last player standing. The table has a running sum that must never exceed 50."
+                       styleClass="htp-body" wrapText="true"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="CARD VALUES" styleClass="htp-section"/>
+                <VBox spacing="4" styleClass="htp-card-list">
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="2 – 8  and  10" styleClass="htp-card-name"/>
+                        <Label text="→" styleClass="htp-arrow"/>
+                        <Label text="Add their face value to the sum." styleClass="htp-card-desc"/>
+                    </HBox>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="9" styleClass="htp-card-name"/>
+                        <Label text="→" styleClass="htp-arrow"/>
+                        <Label text="Neither adds nor subtracts. Sum stays the same." styleClass="htp-card-desc"/>
+                    </HBox>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="J, Q, K" styleClass="htp-card-name"/>
+                        <Label text="→" styleClass="htp-arrow"/>
+                        <Label text="Subtract 10 from the sum." styleClass="htp-card-desc"/>
+                    </HBox>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="A  (Ace)" styleClass="htp-card-name"/>
+                        <Label text="→" styleClass="htp-arrow"/>
+                        <Label text="You choose: add 1 or 10." styleClass="htp-card-desc"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="YOUR TURN" styleClass="htp-section"/>
+                <Label text="Play a card from your hand, then draw one from the deck. If none of your cards can be played without exceeding 50, you are eliminated."
+                       styleClass="htp-body" wrapText="true"/>
+            </VBox>
+
+            <Button text="GOT IT"
+                    styleClass="action-button"
+                    onAction="#onCloseHowToPlay"
+                    prefWidth="140"/>
+
+        </VBox>
+    </VBox>
+
+</AnchorPane>

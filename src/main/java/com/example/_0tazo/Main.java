@@ -1,25 +1,20 @@
 package com.example._0tazo;
 
+import com.example._0tazo.view.SceneManager;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
 
-public class Main extends Application{
+public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/_0tazo/fxml/game-view.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("50TAZO");
-        primaryStage.show();
+        primaryStage.setResizable(false);
+        SceneManager.getInstance().setStage(primaryStage);
+        SceneManager.getInstance().goToWelcome();
     }
 }

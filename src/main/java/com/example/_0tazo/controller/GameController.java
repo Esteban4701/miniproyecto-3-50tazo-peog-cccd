@@ -5,6 +5,7 @@ import com.example._0tazo.model.exception.GameException;
 import com.example._0tazo.utilities.GameTimer;
 import com.example._0tazo.utilities.ITimerListener;
 
+import com.example._0tazo.view.SceneManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -91,7 +92,7 @@ public class GameController implements ITimerListener {
     // ── Initialization ────────────────────────────────────────────────────────
     @FXML
     public void initialize() {
-        initData(3);
+        initData(1);
     }
     /**
      * Receives the machine count from the selection screen, creates the
@@ -173,7 +174,7 @@ public class GameController implements ITimerListener {
                 current instanceof HumanPlayer ? "▶ YOUR TURN" : "▶ " + current.getName()
         );
         updateSumStyle();
-
+        highlightActivePlayer(current);
         if (current instanceof HumanPlayer) {
             humanHasPlayed = false;
             renderHumanHand(true); // enable clicks
@@ -621,5 +622,14 @@ public class GameController implements ITimerListener {
      */
     private void setHandOpacity(javafx.scene.layout.Pane box, double opacity) {
         box.getChildren().forEach(node -> node.setOpacity(opacity));
+    }
+    /**
+     * Navigates back to the welcome screen.
+     * Stops all timers before leaving the game screen.
+     */
+    @FXML
+    private void onGoHome() {
+        timer.stopAll();
+        SceneManager.getInstance().goToWelcome();
     }
 }
