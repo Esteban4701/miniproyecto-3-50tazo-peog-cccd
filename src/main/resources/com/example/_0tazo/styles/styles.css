@@ -1,0 +1,332 @@
+
+.root {
+    -fx-background-color: #1a0a00;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.table-background {
+    -fx-fill: #1a5c2a;
+}
+
+.table-ellipse {
+    -fx-fill: radial-gradient(
+        center 50% 50%,
+        radius 60%,
+        #2e7d44,
+        #1e5c30
+    );
+    -fx-stroke: #c8a84b;
+    -fx-stroke-width: 4;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0.3, 0, 4);
+}
+
+.info-panel {
+    -fx-background-color: rgba(0, 0, 0, 0.65);
+    -fx-background-radius: 8;
+    -fx-border-color: #c8a84b;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-padding: 8 14 8 14;
+    -fx-min-width: 90;
+    -fx-alignment: CENTER;
+}
+
+.panel-eyebrow {
+    -fx-text-fill: #c8a84b;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2;
+}
+
+.timer-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.sum-label {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Courier New", monospace;
+}
+
+/* Cuando la suma se acerca a 50 */
+.sum-label-warning {
+    -fx-text-fill: #ff6b35;
+}
+
+.sum-label-danger {
+    -fx-text-fill: #e63946;
+    -fx-effect: dropshadow(gaussian, #e63946, 8, 0.5, 0, 0);
+}
+
+
+.player-zone {
+    -fx-padding: 8 12 8 12;
+}
+
+.player-zone-side {
+    -fx-max-width: 110;
+}
+
+.player-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1;
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-background-radius: 4;
+    -fx-padding: 2 8 2 8;
+}
+
+.player-label-human {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 12px;
+}
+
+/* Badge de jugador eliminado */
+.player-label-eliminated {
+    -fx-text-fill: #888888;
+    -fx-strikethrough: true;
+}
+
+.zone-label {
+    -fx-text-fill: rgba(200, 168, 75, 0.7);
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1.5;
+}
+
+.card-slot {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(200, 168, 75, 0.4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-border-style: dashed;
+}
+
+.deck-slot {
+    -fx-cursor: hand;
+}
+
+.deck-slot:hover {
+    -fx-border-color: #c8a84b;
+    -fx-border-style: solid;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,75,0.4), 10, 0.3, 0, 0);
+}
+
+.deck-count-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.card {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 6, 0.2, 1, 2);
+    -fx-cursor: default;
+}
+
+.card-playable {
+    -fx-cursor: hand;
+}
+
+.card-playable:hover {
+    -fx-effect: dropshadow(gaussian, rgba(200,168,75,0.8), 12, 0.4, 0, -4);
+    -fx-translate-y: -8;
+}
+
+.card-selected {
+    -fx-effect: dropshadow(gaussian, #f0e68c, 14, 0.6, 0, -6);
+    -fx-translate-y: -12;
+}
+
+.card-not-playable {
+    -fx-opacity: 0.45;
+    -fx-cursor: default;
+}
+
+.turn-indicator {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2;
+    -fx-alignment: CENTER;
+    -fx-opacity: 0.9;
+}
+
+.message-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.78);
+}
+
+.message-label {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 2);
+}
+
+.action-button {
+    -fx-background-color: #c8a84b;
+    -fx-text-fill: #1a0a00;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 30 10 30;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: #e6c46a;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,75,0.5), 10, 0.3, 0, 0);
+}
+/* ── Welcome screen ──────────────────────────────────────── */
+.welcome-title {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Georgia", serif;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 12, 0.5, 0, 3);
+    -fx-letter-spacing: 4;
+}
+
+.welcome-subtitle {
+    -fx-text-fill: rgba(255,255,255,0.65);
+    -fx-font-size: 15px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-letter-spacing: 2;
+}
+
+.welcome-suits {
+    -fx-text-fill: rgba(200,168,75,0.6);
+    -fx-font-size: 28px;
+    -fx-letter-spacing: 6;
+}
+
+.action-button-primary {
+    -fx-background-color: #c8a84b;
+    -fx-font-size: 15px;
+    -fx-padding: 12 30 12 30;
+}
+
+.action-button-primary:hover {
+    -fx-background-color: #e6c46a;
+}
+
+.action-button-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: #c8a84b;
+    -fx-border-color: #c8a84b;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 13px;
+    -fx-padding: 10 24 10 24;
+}
+
+.action-button-secondary:hover {
+    -fx-background-color: rgba(200,168,75,0.12);
+}
+
+/* ── How to Play overlay ─────────────────────────────────── */
+.overlay-backdrop {
+    -fx-background-color: rgba(0,0,0,0.78);
+}
+
+.how-to-play-panel {
+    -fx-background-color: #1a2e1f;
+    -fx-background-radius: 12;
+    -fx-border-color: #c8a84b;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+    -fx-padding: 32 36 32 36;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 24, 0.4, 0, 6);
+}
+
+.htp-title {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.htp-section {
+    -fx-text-fill: #c8a84b;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.htp-body {
+    -fx-text-fill: rgba(255,255,255,0.80);
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-line-spacing: 2;
+}
+
+.htp-card-list {
+    -fx-padding: 4 0 4 8;
+}
+
+.htp-card-name {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-min-width: 110;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.htp-arrow {
+    -fx-text-fill: #c8a84b;
+    -fx-font-size: 13px;
+}
+
+.htp-card-desc {
+    -fx-text-fill: rgba(255,255,255,0.75);
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Selection screen ────────────────────────────────────── */
+.selection-card {
+    -fx-background-color: rgba(0,0,0,0.45);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(200,168,75,0.4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+    -fx-padding: 28 24 28 24;
+    -fx-min-width: 160;
+    -fx-cursor: default;
+}
+
+.selection-card-featured {
+    -fx-background-color: rgba(200,168,75,0.12);
+    -fx-border-color: #c8a84b;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,75,0.35), 16, 0.3, 0, 0);
+}
+
+.selection-number {
+    -fx-text-fill: #f0e68c;
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Georgia", serif;
+}
+
+.selection-label {
+    -fx-text-fill: rgba(255,255,255,0.65);
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.selection-suit {
+    -fx-text-fill: rgba(200,168,75,0.7);
+    -fx-font-size: 20px;
+    -fx-letter-spacing: 4;
+}
