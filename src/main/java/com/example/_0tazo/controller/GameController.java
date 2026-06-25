@@ -119,6 +119,7 @@ public class GameController implements ITimerListener {
         timer.startGeneralTimer();
         renderAll();
         startTurn();
+        Platform.runLater(this::setupKeyboardShortcuts);
     }
 
     // ── Layout setup ──────────────────────────────────────────────────────────
@@ -631,5 +632,59 @@ public class GameController implements ITimerListener {
     private void onGoHome() {
         timer.stopAll();
         SceneManager.getInstance().goToWelcome();
+    }
+    /**
+     * Registers keyboard shortcuts for the human player's turn:
+     * 1–4 to highlight a card, Enter to play the selected card,
+     * T to draw from the deck.
+     */
+    private void setupKeyboardShortcuts() {
+        humanHandBox.getScene().setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case DIGIT1 -> selectCard(0);
+                case DIGIT2 -> selectCard(1);
+                case DIGIT3 -> selectCard(2);
+                case DIGIT4 -> selectCard(3);
+                case ENTER  -> playSelectedCard();
+                case T      -> onDeckClicked();
+            }
+        });
+    }
+
+    /** Index of the card currently highlighted via keyboard. */
+    private int selectedCardIndex = -1;
+
+    /**
+     * Highlights the card at the given index as if the mouse hovered over it,
+     * removing the highlight from any previously selected card.
+     *
+     * @param index the hand index (0–3) to select
+     */
+    private void selectCard(int index) {
+        if (!humanHasPlayed && game.getCurrentPlayer() instanceof HumanPlayer) {
+            // Remove previous selection
+            humanHandBox.getChildren().forEach(node ->
+                    node.getStyleClass().remove("card-selected")
+            );
+            // Apply new selection if index is valid
+            if (index < humanHandBox.getChildren().size()) {
+                humanHandBox.getChildren().get(index)
+                        .getStyleClass().add("card-selected");
+                selectedCardIndex = index;
+            }
+        }
+    }
+
+    /**
+     * Plays the currently keyboard-selected card, equivalent to clicking it.
+     */
+    private void playSelectedCard() {
+        if (selectedCardIndex >= 0) {
+            onHumanCardClicked(selectedCardIndex);
+            selectedCardIndex = -1;
+            humanHandBox.getChildren().forEach(node ->
+                    node.getStyleClass().remove("card-selected")
+            );
+        }
     }
 }
