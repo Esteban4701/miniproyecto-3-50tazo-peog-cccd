@@ -82,8 +82,10 @@ public class GameController implements ITimerListener {
     private GameTimer timer;
     private int machineCount;
     private int pendingAceIndex = -1;
+    private boolean isFirstTurn = true;
     // ── Internal state ────────────────────────────────────────────────────────
 
+    private int sessionId = 0;
     /** Tracks whether the human has already played a card this turn. */
     private boolean humanHasPlayed;
 
@@ -103,11 +105,12 @@ public class GameController implements ITimerListener {
      * @param machineCount number of computer players (1–3)
      */
     public void initData(int machineCount) {
+        final int currentSession = ++sessionId;
         this.machineCount = machineCount;
         this.game          = new Game(machineCount);
         this.timer         = new GameTimer(this);
         this.humanHasPlayed = false;
-
+        this.isFirstTurn     = true;
         setupLayout(machineCount);
 
         try {
@@ -160,11 +163,14 @@ public class GameController implements ITimerListener {
             return;
         }
 
-        try {
-            game.checkCurrentPlayerElimination();
-        } catch (GameException e) {
-            renderAll();
+        if (!isFirstTurn) {
+            try {
+                game.checkCurrentPlayerElimination();
+            } catch (GameException e) {
+                renderAll();
+            }
         }
+        isFirstTurn = false;
 
         if (game.isGameOver()) {
             handleGameOver();
@@ -172,16 +178,39 @@ public class GameController implements ITimerListener {
         }
 
         IPlayer current = game.getCurrentPlayer();
+
+        if (!current.isActive()) {
+            game.nextTurn();
+            startTurn();
+            return;
+        }
+
         turnIndicator.setText(
                 current instanceof HumanPlayer ? "▶ YOUR TURN" : "▶ " + current.getName()
         );
         updateSumStyle();
         highlightActivePlayer(current);
+
         if (current instanceof HumanPlayer) {
+            if (!current.hasLegalMove(game.getTableSum())) {
+                try {
+                    game.eliminateCurrentPlayer();
+                    renderAll();
+                    if (game.isGameOver()) {
+                        handleGameOver();
+                        return;
+                    }
+                    game.nextTurn();
+                    startTurn();
+                } catch (GameException e) {
+                    showMessage(e.getMessage(), false);
+                }
+                return;
+            }
             humanHasPlayed = false;
-            renderHumanHand(true); // enable clicks
+            renderHumanHand(true);
         } else {
-            renderHumanHand(false); // disable clicks during machine turn
+            renderHumanHand(false);
             timer.startMachineTurnTimer();
         }
     }
@@ -236,11 +265,9 @@ public class GameController implements ITimerListener {
      */
     @FXML
     private void onPlayAgain() {
-        messageOverlay.setVisible(false);
         timer.stopAll();
-        initData(machineCount);
+        SceneManager.getInstance().goToGame(machineCount);
     }
-
     // ── ITimerListener callbacks ──────────────────────────────────────────────
 
     /**
@@ -249,9 +276,11 @@ public class GameController implements ITimerListener {
      */
     @Override
     public void onTick(int elapsedSeconds) {
-        Platform.runLater(() ->
-                timerLabel.setText(formatTime(elapsedSeconds))
-        );
+        final int capturedSession = sessionId;
+        Platform.runLater(() -> {
+            if (capturedSession != sessionId) return; // callback de sesión vieja
+            timerLabel.setText(formatTime(elapsedSeconds));
+        });
     }
 
     /**
@@ -261,8 +290,15 @@ public class GameController implements ITimerListener {
     @Override
     public void onMachineTurnReady() {
         Platform.runLater(() -> {
+            if (game.isGameOver()) return;
+            if (game.getCurrentPlayer() instanceof HumanPlayer) return;
+
             try {
                 game.computerTakeTurn();
+                if (game.isGameOver()) {
+                    handleGameOver();
+                    return;
+                }
                 renderAll();
             } catch (GameException e) {
                 showMessage(e.getMessage(), false);
@@ -277,11 +313,10 @@ public class GameController implements ITimerListener {
     @Override
     public void onMachineDrawReady() {
         Platform.runLater(() -> {
+            if (game.isGameOver()) return;
+            if (game.getCurrentPlayer() instanceof HumanPlayer) return;
+
             renderAll();
-            if (game.isGameOver()) {
-                handleGameOver();
-                return;
-            }
             game.nextTurn();
             startTurn();
         });
@@ -293,6 +328,7 @@ public class GameController implements ITimerListener {
      * Re-renders all UI components to reflect the current model state.
      */
     private void renderAll() {
+        if (game.isGameOver()) return;
         renderTable();
         renderDeck();
         renderMachineHands();

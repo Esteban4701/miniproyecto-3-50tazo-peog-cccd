@@ -86,6 +86,8 @@ public class GameTimer {
     /** Controls whether the machine turn timer is running. */
     private volatile boolean machineRunning;
 
+    private volatile boolean stopped = false;
+
     // ── Constructor ───────────────────────────────────────────────────────────
 
     /**
@@ -112,6 +114,7 @@ public class GameTimer {
      * <p>If the timer is already running this method does nothing.</p>
      */
     public void startGeneralTimer() {
+        stopped = false;
         if (generalRunning) return;
 
         generalRunning = true;
@@ -234,8 +237,29 @@ public class GameTimer {
      * application closes.
      */
     public void stopAll() {
-        stopGeneralTimer();
-        stopMachineTurnTimer();
+        stopped = true;
+        generalRunning = false;
+        machineRunning = false;
+
+        if (generalTimerThread != null) {
+            generalTimerThread.interrupt();
+            try {
+                generalTimerThread.join(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        if (machineTurnThread != null) {
+            machineTurnThread.interrupt();
+            try {
+                machineTurnThread.join(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        elapsedSeconds = 0;
+        generalTimerThread = null;
+        machineTurnThread  = null;
     }
 
     // ── Queries ───────────────────────────────────────────────────────────────

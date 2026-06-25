@@ -140,7 +140,7 @@ public class Game {
             throw new GameException.InvalidTurnException(current.getName(), current.getName());
         }
 
-        if (current.hasLegalMove(table.getTableSum())) {
+        if (!current.hasLegalMove(table.getTableSum())) {
             eliminateCurrentPlayer();
             return;
         }
@@ -171,7 +171,7 @@ public class Game {
      * @throws GameException if an error occurs during elimination
      */
     public void checkCurrentPlayerElimination() throws GameException {
-        if (getCurrentPlayer().hasLegalMove(table.getTableSum())) {
+        if (!getCurrentPlayer().hasLegalMove(table.getTableSum())) {
             eliminateCurrentPlayer();
         }
     }
@@ -213,7 +213,12 @@ public class Game {
     // ── Queries ───────────────────────────────────────────────────────────────
 
     /** @return the player whose turn it currently is */
-    public IPlayer getCurrentPlayer() { return players.get(currentPlayerIndex); }
+    public IPlayer getCurrentPlayer() {
+        if (currentPlayerIndex >= players.size()) {
+            currentPlayerIndex = 0;
+        }
+        return players.get(currentPlayerIndex);
+    }
 
     /** @return the last remaining player if the game is over, otherwise {@code null} */
     public IPlayer getWinner() {
