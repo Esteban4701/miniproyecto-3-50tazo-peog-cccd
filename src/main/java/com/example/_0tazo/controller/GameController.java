@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -364,25 +365,32 @@ public class GameController implements ITimerListener {
      * Re-renders all machine player hands (cards face down).
      */
     private void renderMachineHands() {
-        java.util.LinkedList<IPlayer> players = game.getPlayers();
+        machine1HandBox.getChildren().clear();
+        machine2HandBox.getChildren().clear();
+        machine3HandBox.getChildren().clear();
+
+        VBox[] zones = { machine1Zone, machine2Zone, machine3Zone };
+        Pane[] boxes = { machine1HandBox, machine2HandBox, machine3HandBox };
+        Label[] labels = { machine1Label, machine2Label, machine3Label };
+
         int machineIndex = 0;
+        for (int i = 0; i < 3 && machineIndex < machineCount; i++) {
+            String machineName = "Machine " + (machineIndex + 1);
+            IPlayer player = game.getPlayers().stream()
+                    .filter(p -> p.getName().equals(machineName))
+                    .findFirst()
+                    .orElse(null);
 
-        for (IPlayer player : players) {
-            if (player instanceof ComputerPlayer && machineIndex < 3) {
-                switch (machineIndex) {
-                    case 0 -> renderMachineHand(machine1HandBox, player);
-                    case 1 -> renderMachineHand(machine2HandBox, player);
-                    case 2 -> renderMachineHand(machine3HandBox, player);
+            if (player != null && player.isActive()) {
+                for (Card card : player.getHand()) {
+                    boxes[machineIndex].getChildren()
+                            .add(createCardView(card, false, -1, false));
                 }
-                machineIndex++;
+                labels[machineIndex].getStyleClass().remove("player-label-eliminated");
+            } else {
+                labels[machineIndex].getStyleClass().add("player-label-eliminated");
             }
-        }
-    }
-
-    private void renderMachineHand(javafx.scene.layout.Pane box, IPlayer player) {
-        box.getChildren().clear();
-        for (Card card : player.getHand()) {
-            box.getChildren().add(createCardView(card, false, -1, false));
+            machineIndex++;
         }
     }
 
@@ -393,20 +401,23 @@ public class GameController implements ITimerListener {
      */
     private void renderHumanHand(boolean clickable) {
         humanHandBox.getChildren().clear();
-        IPlayer human = game.getPlayers().getFirst();
-        ArrayList<Card> hand = human.getHand();
+        IPlayer human = game.getPlayers().stream()
+                .filter(p -> p instanceof HumanPlayer)
+                .findFirst()
+                .orElse(null);
 
+        if (human == null || !human.isActive()) {
+            humanLabel.getStyleClass().add("player-label-eliminated");
+            return;
+        }
+
+        ArrayList<Card> hand = human.getHand();
         for (int i = 0; i < hand.size(); i++) {
             Card card     = hand.get(i);
             boolean legal = game.getTable().isCardPlayable(card);
             ImageView iv  = createCardView(card, true, i, clickable && legal);
-
             if (clickable) {
-                if (legal) {
-                    iv.getStyleClass().add("card-playable");
-                } else {
-                    iv.getStyleClass().add("card-not-playable");
-                }
+                iv.getStyleClass().add(legal ? "card-playable" : "card-not-playable");
             }
             humanHandBox.getChildren().add(iv);
         }
