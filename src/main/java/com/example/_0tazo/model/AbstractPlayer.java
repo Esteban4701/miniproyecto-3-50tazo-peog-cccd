@@ -113,9 +113,9 @@ public abstract class AbstractPlayer implements IPlayer {
     @Override
     public boolean hasLegalMove(int currentSum) {
         for (Card card : hand) {
-            if (card.isPlayable(currentSum)) return false;
+            if (card.isPlayable(currentSum)) return true;
         }
-        return true;
+        return false;
     }
 
     // ── Getters ──────────────────────────────────────────────────────────────

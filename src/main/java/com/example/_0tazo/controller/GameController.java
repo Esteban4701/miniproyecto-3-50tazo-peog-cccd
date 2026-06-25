@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -82,8 +83,10 @@ public class GameController implements ITimerListener {
     private GameTimer timer;
     private int machineCount;
     private int pendingAceIndex = -1;
+    private boolean isFirstTurn = true;
     // ── Internal state ────────────────────────────────────────────────────────
 
+    private int sessionId = 0;
     /** Tracks whether the human has already played a card this turn. */
     private boolean humanHasPlayed;
 
@@ -103,11 +106,12 @@ public class GameController implements ITimerListener {
      * @param machineCount number of computer players (1–3)
      */
     public void initData(int machineCount) {
+        final int currentSession = ++sessionId;
         this.machineCount = machineCount;
         this.game          = new Game(machineCount);
         this.timer         = new GameTimer(this);
         this.humanHasPlayed = false;
-
+        this.isFirstTurn     = true;
         setupLayout(machineCount);
 
         try {
@@ -160,11 +164,14 @@ public class GameController implements ITimerListener {
             return;
         }
 
-        try {
-            game.checkCurrentPlayerElimination();
-        } catch (GameException e) {
-            renderAll();
+        if (!isFirstTurn) {
+            try {
+                game.checkCurrentPlayerElimination();
+            } catch (GameException e) {
+                renderAll();
+            }
         }
+        isFirstTurn = false;
 
         if (game.isGameOver()) {
             handleGameOver();
@@ -172,16 +179,39 @@ public class GameController implements ITimerListener {
         }
 
         IPlayer current = game.getCurrentPlayer();
+
+        if (!current.isActive()) {
+            game.nextTurn();
+            startTurn();
+            return;
+        }
+
         turnIndicator.setText(
                 current instanceof HumanPlayer ? "▶ YOUR TURN" : "▶ " + current.getName()
         );
         updateSumStyle();
         highlightActivePlayer(current);
+
         if (current instanceof HumanPlayer) {
+            if (!current.hasLegalMove(game.getTableSum())) {
+                try {
+                    game.eliminateCurrentPlayer();
+                    renderAll();
+                    if (game.isGameOver()) {
+                        handleGameOver();
+                        return;
+                    }
+                    game.nextTurn();
+                    startTurn();
+                } catch (GameException e) {
+                    showMessage(e.getMessage(), false);
+                }
+                return;
+            }
             humanHasPlayed = false;
-            renderHumanHand(true); // enable clicks
+            renderHumanHand(true);
         } else {
-            renderHumanHand(false); // disable clicks during machine turn
+            renderHumanHand(false);
             timer.startMachineTurnTimer();
         }
     }
@@ -236,11 +266,9 @@ public class GameController implements ITimerListener {
      */
     @FXML
     private void onPlayAgain() {
-        messageOverlay.setVisible(false);
         timer.stopAll();
-        initData(machineCount);
+        SceneManager.getInstance().goToGame(machineCount);
     }
-
     // ── ITimerListener callbacks ──────────────────────────────────────────────
 
     /**
@@ -249,9 +277,11 @@ public class GameController implements ITimerListener {
      */
     @Override
     public void onTick(int elapsedSeconds) {
-        Platform.runLater(() ->
-                timerLabel.setText(formatTime(elapsedSeconds))
-        );
+        final int capturedSession = sessionId;
+        Platform.runLater(() -> {
+            if (capturedSession != sessionId) return; // callback de sesión vieja
+            timerLabel.setText(formatTime(elapsedSeconds));
+        });
     }
 
     /**
@@ -261,8 +291,15 @@ public class GameController implements ITimerListener {
     @Override
     public void onMachineTurnReady() {
         Platform.runLater(() -> {
+            if (game.isGameOver()) return;
+            if (game.getCurrentPlayer() instanceof HumanPlayer) return;
+
             try {
                 game.computerTakeTurn();
+                if (game.isGameOver()) {
+                    handleGameOver();
+                    return;
+                }
                 renderAll();
             } catch (GameException e) {
                 showMessage(e.getMessage(), false);
@@ -277,11 +314,10 @@ public class GameController implements ITimerListener {
     @Override
     public void onMachineDrawReady() {
         Platform.runLater(() -> {
+            if (game.isGameOver()) return;
+            if (game.getCurrentPlayer() instanceof HumanPlayer) return;
+
             renderAll();
-            if (game.isGameOver()) {
-                handleGameOver();
-                return;
-            }
             game.nextTurn();
             startTurn();
         });
@@ -293,6 +329,7 @@ public class GameController implements ITimerListener {
      * Re-renders all UI components to reflect the current model state.
      */
     private void renderAll() {
+        if (game.isGameOver()) return;
         renderTable();
         renderDeck();
         renderMachineHands();
@@ -328,25 +365,32 @@ public class GameController implements ITimerListener {
      * Re-renders all machine player hands (cards face down).
      */
     private void renderMachineHands() {
-        java.util.LinkedList<IPlayer> players = game.getPlayers();
+        machine1HandBox.getChildren().clear();
+        machine2HandBox.getChildren().clear();
+        machine3HandBox.getChildren().clear();
+
+        VBox[] zones = { machine1Zone, machine2Zone, machine3Zone };
+        Pane[] boxes = { machine1HandBox, machine2HandBox, machine3HandBox };
+        Label[] labels = { machine1Label, machine2Label, machine3Label };
+
         int machineIndex = 0;
+        for (int i = 0; i < 3 && machineIndex < machineCount; i++) {
+            String machineName = "Machine " + (machineIndex + 1);
+            IPlayer player = game.getPlayers().stream()
+                    .filter(p -> p.getName().equals(machineName))
+                    .findFirst()
+                    .orElse(null);
 
-        for (IPlayer player : players) {
-            if (player instanceof ComputerPlayer && machineIndex < 3) {
-                switch (machineIndex) {
-                    case 0 -> renderMachineHand(machine1HandBox, player);
-                    case 1 -> renderMachineHand(machine2HandBox, player);
-                    case 2 -> renderMachineHand(machine3HandBox, player);
+            if (player != null && player.isActive()) {
+                for (Card card : player.getHand()) {
+                    boxes[machineIndex].getChildren()
+                            .add(createCardView(card, false, -1, false));
                 }
-                machineIndex++;
+                labels[machineIndex].getStyleClass().remove("player-label-eliminated");
+            } else {
+                labels[machineIndex].getStyleClass().add("player-label-eliminated");
             }
-        }
-    }
-
-    private void renderMachineHand(javafx.scene.layout.Pane box, IPlayer player) {
-        box.getChildren().clear();
-        for (Card card : player.getHand()) {
-            box.getChildren().add(createCardView(card, false, -1, false));
+            machineIndex++;
         }
     }
 
@@ -357,20 +401,23 @@ public class GameController implements ITimerListener {
      */
     private void renderHumanHand(boolean clickable) {
         humanHandBox.getChildren().clear();
-        IPlayer human = game.getPlayers().getFirst();
-        ArrayList<Card> hand = human.getHand();
+        IPlayer human = game.getPlayers().stream()
+                .filter(p -> p instanceof HumanPlayer)
+                .findFirst()
+                .orElse(null);
 
+        if (human == null || !human.isActive()) {
+            humanLabel.getStyleClass().add("player-label-eliminated");
+            return;
+        }
+
+        ArrayList<Card> hand = human.getHand();
         for (int i = 0; i < hand.size(); i++) {
             Card card     = hand.get(i);
             boolean legal = game.getTable().isCardPlayable(card);
             ImageView iv  = createCardView(card, true, i, clickable && legal);
-
             if (clickable) {
-                if (legal) {
-                    iv.getStyleClass().add("card-playable");
-                } else {
-                    iv.getStyleClass().add("card-not-playable");
-                }
+                iv.getStyleClass().add(legal ? "card-playable" : "card-not-playable");
             }
             humanHandBox.getChildren().add(iv);
         }
