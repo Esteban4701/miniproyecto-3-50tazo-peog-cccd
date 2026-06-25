@@ -71,14 +71,14 @@ public class SceneManager {
      * Navigates to the welcome screen.
      */
     public void goToWelcome() {
-        loadScene("welcome-view.fxml", null, 0);
+        loadScene("welcome-view.fxml", 0);
     }
 
     /**
      * Navigates to the machine selection screen.
      */
     public void goToSelection() {
-        loadScene("selection-view.fxml", null, 0);
+        loadScene("selection-view.fxml", 0);
     }
 
     /**
@@ -88,7 +88,7 @@ public class SceneManager {
      * @param machineCount the number of computer players (1–3)
      */
     public void goToGame(int machineCount) {
-        loadScene("game-view.fxml", null, machineCount);
+        loadScene("game-view.fxml", machineCount);
     }
 
     // ── Private helpers ───────────────────────────────────────────────────────
@@ -98,10 +98,9 @@ public class SceneManager {
      * and sets the resulting scene on the stage.
      *
      * @param fxmlFile     the FXML filename (e.g. {@code "game-view.fxml"})
-     * @param title        optional window title override; {@code null} keeps current
      * @param machineCount passed to {@link GameController#initData(int)} when > 0
      */
-    private void loadScene(String fxmlFile, String title, int machineCount) {
+    private void loadScene(String fxmlFile, int machineCount) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(FXML_PATH + fxmlFile)
@@ -122,7 +121,6 @@ public class SceneManager {
                 scene.setRoot(root);
             }
 
-            if (title != null) stage.setTitle(title);
             stage.show();
 
         } catch (IOException e) {
