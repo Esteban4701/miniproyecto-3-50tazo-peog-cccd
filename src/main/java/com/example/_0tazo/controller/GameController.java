@@ -411,7 +411,7 @@ public class GameController implements ITimerListener {
         timer.stopAll();
         IPlayer winner = game.getWinner();
         String message = (winner instanceof HumanPlayer)
-                ? "🏆 You win!"
+                ? "You win!"
                 : winner.getName() + " wins!";
         showMessage(message, true);
     }

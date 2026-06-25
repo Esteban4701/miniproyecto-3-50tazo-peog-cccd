@@ -50,9 +50,6 @@ public class GameException extends Exception {
         super(message, cause);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // Nested subclasses
-    // ══════════════════════════════════════════════════════════════════════════
 
     /**
      * Thrown when a player attempts to play a card that would cause the
