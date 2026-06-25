@@ -27,6 +27,7 @@ import java.util.LinkedList;
  * }</pre>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     Table
  * @see     IPlayer
@@ -139,7 +140,7 @@ public class Game {
             throw new GameException.InvalidTurnException(current.getName(), current.getName());
         }
 
-        if (!current.hasLegalMove(table.getTableSum())) {
+        if (current.hasLegalMove(table.getTableSum())) {
             eliminateCurrentPlayer();
             return;
         }
@@ -170,7 +171,7 @@ public class Game {
      * @throws GameException if an error occurs during elimination
      */
     public void checkCurrentPlayerElimination() throws GameException {
-        if (!getCurrentPlayer().hasLegalMove(table.getTableSum())) {
+        if (getCurrentPlayer().hasLegalMove(table.getTableSum())) {
             eliminateCurrentPlayer();
         }
     }

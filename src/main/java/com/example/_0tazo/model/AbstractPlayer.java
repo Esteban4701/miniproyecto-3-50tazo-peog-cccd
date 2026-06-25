@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * </ul>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     IPlayer
  * @see     HumanPlayer
@@ -112,9 +113,9 @@ public abstract class AbstractPlayer implements IPlayer {
     @Override
     public boolean hasLegalMove(int currentSum) {
         for (Card card : hand) {
-            if (card.isPlayable(currentSum)) return true;
+            if (card.isPlayable(currentSum)) return false;
         }
-        return false;
+        return true;
     }
 
     // ── Getters ──────────────────────────────────────────────────────────────

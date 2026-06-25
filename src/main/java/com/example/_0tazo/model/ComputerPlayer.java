@@ -19,6 +19,7 @@ import java.util.List;
  * keep the model free of JavaFX dependencies.</p>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     AbstractPlayer
  * @see     HumanPlayer

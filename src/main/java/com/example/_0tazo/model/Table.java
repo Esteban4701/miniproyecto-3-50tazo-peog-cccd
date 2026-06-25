@@ -18,6 +18,7 @@ import com.example._0tazo.model.exception.GameException;
  * focused on turn flow and player management.</p>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     Game
  * @see     Deck

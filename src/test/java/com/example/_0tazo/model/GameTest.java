@@ -195,7 +195,7 @@ class GameTest {
         // By forcing sum to 50, only 9 (value=0) and J/Q/K (value=-10) are playable
         // If the human has none of those, they get eliminated
         IPlayer human = game1.getCurrentPlayer();
-        if (!human.hasLegalMove(50)) {
+        if (human.hasLegalMove(50)) {
             int playersBefore = game1.getPlayers().size();
             game1.checkCurrentPlayerElimination();
             assertTrue(game1.getPlayers().size() < playersBefore

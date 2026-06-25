@@ -37,6 +37,7 @@ import java.util.Objects;
  * in {@code Platform.runLater()} since they arrive from background threads.</p>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     Game
  * @see     GameTimer

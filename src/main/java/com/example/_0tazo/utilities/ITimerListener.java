@@ -32,6 +32,7 @@ package com.example._0tazo.utilities
  * }</pre>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     GameTimer
  */

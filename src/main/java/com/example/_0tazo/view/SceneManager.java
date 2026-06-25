@@ -23,6 +23,7 @@ import java.io.IOException;
  * via {@link #setStage(Stage)} before any transition is attempted.</p>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  */
 public class SceneManager {

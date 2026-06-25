@@ -40,6 +40,7 @@ import java.util.Random;
  * }</pre>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     ITimerListener
  */

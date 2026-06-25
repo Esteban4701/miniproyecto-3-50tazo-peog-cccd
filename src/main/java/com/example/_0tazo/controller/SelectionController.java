@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
  * passes the chosen count to {@link GameController#initData(int)}.</p>
  *
  * @author  Paulo Esteban Ordoñez Gutiérrez
+ * @author Cristian Camilo Criollo Diaz
  * @version 1.0
  * @see     SceneManager
  */
