@@ -124,6 +124,7 @@ public class GameController implements ITimerListener {
         }
 
         timer.startGeneralTimer();
+        SoundManager.getInstance().playBackgroundMusic();
         renderAll();
         startTurn();
         Platform.runLater(this::setupKeyboardShortcuts);
@@ -461,6 +462,7 @@ public class GameController implements ITimerListener {
      */
     private void handleGameOver() {
         timer.stopAll();
+        SoundManager.getInstance().stopBackgroundMusic();
         IPlayer winner = game.getWinner();
         if (winner instanceof HumanPlayer) {
             SoundManager.getInstance().playWinSound();       // ← ganó el humano
