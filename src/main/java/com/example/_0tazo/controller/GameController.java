@@ -4,6 +4,7 @@ import com.example._0tazo.model.*;
 import com.example._0tazo.model.exception.GameException;
 import com.example._0tazo.utilities.GameTimer;
 import com.example._0tazo.utilities.ITimerListener;
+import com.example._0tazo.utilities.SoundManager;
 
 import com.example._0tazo.view.SceneManager;
 import javafx.application.Platform;
@@ -19,6 +20,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
 
 /**
  * Controller for the main game view (GameView.fxml).
@@ -251,6 +253,7 @@ public class GameController implements ITimerListener {
 
         try {
             game.currentPlayerDrawCard();
+            SoundManager.getInstance().playCardSound();
             humanHasPlayed = false;
             renderAll();
             game.nextTurn();
@@ -296,6 +299,7 @@ public class GameController implements ITimerListener {
 
             try {
                 game.computerTakeTurn();
+                SoundManager.getInstance().playCardSound();
                 if (game.isGameOver()) {
                     handleGameOver();
                     return;
@@ -458,6 +462,11 @@ public class GameController implements ITimerListener {
     private void handleGameOver() {
         timer.stopAll();
         IPlayer winner = game.getWinner();
+        if (winner instanceof HumanPlayer) {
+            SoundManager.getInstance().playWinSound();       // ← ganó el humano
+        } else {
+            SoundManager.getInstance().playEliminatedSound(); // ← ganó la máquina
+        }
         String message = (winner instanceof HumanPlayer)
                 ? "You win!"
                 : winner.getName() + " wins!";
@@ -607,6 +616,7 @@ public class GameController implements ITimerListener {
     private void playHumanCard(int cardIndex) {
         try {
             game.humanPlayCard(cardIndex);
+            SoundManager.getInstance().playCardSound();
             humanHasPlayed = true;
             renderAll();
             renderHumanHand(false);
