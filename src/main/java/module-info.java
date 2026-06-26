@@ -1,6 +1,7 @@
 module com.example._0tazo {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires org.junit.jupiter.api;
 
     opens com.example._0tazo to javafx.fxml;
